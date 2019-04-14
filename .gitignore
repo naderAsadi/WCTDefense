@@ -1,0 +1,6 @@
+#Pre-trained models
+/saved_models
+mnist_clean.pickle
+
+#Temorary files
+/Temporary
