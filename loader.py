@@ -14,7 +14,7 @@ def get_loader(dataset, image_size, batch_size, dataroot, train):
                                            torchvision.transforms.Resize(image_size),
                                            torchvision.transforms.ToTensor(),
                                        ])),
-            batch_size=batch_size, shuffle=True)
+            batch_size=batch_size, shuffle=False)
     elif dataset == 'emnist':
         loader = torch.utils.data.DataLoader(
             torchvision.datasets.EMNIST(dataroot, split='fonts', train=train, download=True,
@@ -22,7 +22,7 @@ def get_loader(dataset, image_size, batch_size, dataroot, train):
                                             torchvision.transforms.Resize(image_size),
                                             torchvision.transforms.ToTensor()
                                         ])),
-            batch_size=batch_size, shuffle=True
+            batch_size=batch_size, shuffle=False
         )
     elif dataset == 'svhn':
         loader = torch.utils.data.DataLoader(
@@ -31,5 +31,5 @@ def get_loader(dataset, image_size, batch_size, dataroot, train):
                                             torchvision.transforms.Resize(image_size),
                                             torchvision.transforms.ToTensor(),
                                         ])),
-            batch_size=batch_size, shuffle=True)
+            batch_size=batch_size, shuffle=False)
     return loader
