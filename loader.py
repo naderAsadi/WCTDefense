@@ -3,9 +3,12 @@ import torchvision
 
 def get_loader(dataset, image_size, batch_size, dataroot, train):
     """
-    Returns required dataloader
     :param dataset:
-    :return dataloader:
+    :param image_size: 
+    :param batch_size:
+    :param dataroot:
+    :param train:
+    :return:
     """
     if dataset == 'mnist':
         loader = torch.utils.data.DataLoader(
