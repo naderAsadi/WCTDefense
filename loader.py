@@ -1,10 +1,10 @@
 import torch
 import torchvision
 
-def get_loader(dataset, image_size, batch_size, dataroot, train):
+def get_loader(dataset, image_size, batch_size, dataroot, train=True):
     """
     :param dataset:
-    :param image_size: 
+    :param image_size:
     :param batch_size:
     :param dataroot:
     :param train:

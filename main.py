@@ -5,7 +5,7 @@ from torch.autograd import Variable
 from models.models import VGG16, load_model
 from utils import transform, NearestNeighbor
 from loader import get_loader
-from advertorch.attacks import FGSM, PGDAttack, CarliniWagnerL2Attack
+from advertorch.attacks import FGSM, LinfBasicIterativeAttack, PGDAttack, CarliniWagnerL2Attack
 
 def test_model(model, dataroot, device):
     ################
@@ -16,6 +16,7 @@ def test_model(model, dataroot, device):
     # Attacks
     ################
     fgsm = FGSM(predict=model)
+    bim = LinfBasicIterativeAttack(predict=model)
     pgd = PGDAttack(predict=model)
     cw = CarliniWagnerL2Attack(predict=model, num_classes=10)
     ###################

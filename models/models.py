@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import math
 
 #################
 # Autoencoder
@@ -459,6 +460,92 @@ class Net(nn.Module):
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
 
+class VGG19(nn.Module):
+    def __init__(self, in_channels):
+        super(VGG19, self).__init__()
+        self.block1 = nn.Sequential(
+            nn.Conv2d(in_channels, 64, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, 3, 1, 1),
+            nn.ReLU()
+        )
+        self.pool1 = nn.MaxPool2d(2,2)
+
+        self.block2 = nn.Sequential(
+            nn.Conv2d(64, 128, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(128, 128, 3, 1, 1),
+            nn.ReLU()
+        )
+        self.pool2 = nn.MaxPool2d(2, 2)
+
+        self.block3 = nn.Sequential(
+            nn.Conv2d(128, 256, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(256, 256, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(256, 256, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(256, 256, 3, 1, 1),
+            nn.ReLU()
+        )
+        self.pool3 = nn.MaxPool2d(2, 2)
+
+        self.block4 = nn.Sequential(
+            nn.Conv2d(256, 512, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, 3, 1, 1),
+            nn.ReLU()
+        )
+        self.pool4 = nn.MaxPool2d(2, 2)
+
+        self.block5 = nn.Sequential(
+            nn.Conv2d(512, 512, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, 3, 1, 1),
+            nn.ReLU(),
+            nn.Conv2d(512, 512, 3, 1, 1),
+            nn.ReLU()
+        )
+        self.pool5 = nn.MaxPool2d(2, 2)
+
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(512, 512),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(512, 512),
+            nn.ReLU(True),
+            nn.Linear(512, 10),
+        )
+        # Initialization
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
+                m.weight.data.normal_(0, math.sqrt(2. / n))
+                m.bias.data.zero_()
+
+    def forward(self, x):
+        x = self.block1(x)
+        x = self.pool1(x)
+        x = self.block2(x)
+        x = self.pool2(x)
+        x = self.block3(x)
+        x = self.pool3(x)
+        x = self.block4(x)
+        x = self.pool4(x)
+        x = self.block5(x)
+        x = self.pool5(x)
+
+        x = x.view(x.shape[0], -1)
+        x = self.classifier(x)
+        return x
 
 
 class VGG16(nn.Module):
