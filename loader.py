@@ -35,4 +35,12 @@ def get_loader(dataset, image_size, batch_size, dataroot, train=True):
                                             torchvision.transforms.ToTensor(),
                                         ])),
             batch_size=batch_size, shuffle=False)
+    elif dataset == 'cifar':
+        loader = torch.utils.data.DataLoader(
+            torchvision.datasets.CIFAR10(dataroot, train=train ,download=True,
+                                       transform=torchvision.transforms.Compose([
+                                            torchvision.transforms.Resize(image_size),
+                                            torchvision.transforms.ToTensor(),
+                                        ])),
+            batch_size=batch_size, shuffle=False)
     return loader
