@@ -532,7 +532,6 @@ class VGG19(nn.Module):
                 m.bias.data.zero_()
 
     def forward(self, x):
-        print(x.shape)
         out = self.block1(x)
         out = self.pool1(out)
         out = self.block2(out)
