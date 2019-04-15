@@ -532,6 +532,32 @@ class VGG19(nn.Module):
                 m.bias.data.zero_()
 
     def forward(self, x):
+        print(x.shape)
+        out = self.block1(x)
+        out = self.pool1(out)
+        out = self.block2(out)
+        out = self.pool2(out)
+        out = self.block3(out)
+        out = self.pool3(out)
+        out = self.block4(out)
+        out = self.pool4(out)
+        out = self.block5(out)
+        out = self.pool5(out)
+
+        out = out.view(out.shape[0], -1)
+        out = self.classifier(out)
+        return out
+
+    def encode3(self, x):
+        x = self.block1(x)
+        x = self.pool1(x)
+        x = self.block2(x)
+        x = self.pool2(x)
+        x = self.block3(x)
+        x = self.pool3(x)
+        return x
+
+    def encode4(self, x):
         x = self.block1(x)
         x = self.pool1(x)
         x = self.block2(x)
@@ -540,34 +566,9 @@ class VGG19(nn.Module):
         x = self.pool3(x)
         x = self.block4(x)
         x = self.pool4(x)
-        x = self.block5(x)
-        x = self.pool5(x)
-
-        x = x.view(x.shape[0], -1)
-        x = self.classifier(x)
         return x
 
-    def forward3(self, x):
-        x = self.block1(x)
-        x = self.pool1(x)
-        x = self.block2(x)
-        x = self.pool2(x)
-        x = self.block3(x)
-        x = self.pool3(x)
-        return x
-
-    def forward4(self, x):
-        x = self.block1(x)
-        x = self.pool1(x)
-        x = self.block2(x)
-        x = self.pool2(x)
-        x = self.block3(x)
-        x = self.pool3(x)
-        x = self.block4(x)
-        x = self.pool4(x)
-        return x
-
-    def forward5(self, x):
+    def encode5(self, x):
         x = self.block1(x)
         x = self.pool1(x)
         x = self.block2(x)
@@ -948,6 +949,6 @@ def save_model(model ,epoch, optim , filename):
 def load_model(model, root):
     checkpoint = torch.load(root)
     #epoch = checkpoint['epoch']
-    #model.load_state_dict(checkpoint['state_dict'])
+    model.load_state_dict(checkpoint)
     #optimizer.load_state_dict(checkpoint['optimizer'])
-    return checkpoint#, optimizer, epoch
+    return model#, optimizer, epoch
