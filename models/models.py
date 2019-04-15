@@ -947,7 +947,7 @@ def save_model(model ,epoch, optim , filename):
 
 def load_model(model, root):
     checkpoint = torch.load(root)
-    epoch = checkpoint['epoch']
+    #epoch = checkpoint['epoch']
     model.load_state_dict(checkpoint['state_dict'])
     #optimizer.load_state_dict(checkpoint['optimizer'])
-    return model#, optimizer, epoch
+    return checkpoint#, optimizer, epoch
