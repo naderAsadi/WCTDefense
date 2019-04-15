@@ -547,6 +547,61 @@ class VGG19(nn.Module):
         x = self.classifier(x)
         return x
 
+    def forward3(self, x):
+        x = self.block1(x)
+        x = self.pool1(x)
+        x = self.block2(x)
+        x = self.pool2(x)
+        x = self.block3(x)
+        x = self.pool3(x)
+        return x
+
+    def forward4(self, x):
+        x = self.block1(x)
+        x = self.pool1(x)
+        x = self.block2(x)
+        x = self.pool2(x)
+        x = self.block3(x)
+        x = self.pool3(x)
+        x = self.block4(x)
+        x = self.pool4(x)
+        return x
+
+    def forward5(self, x):
+        x = self.block1(x)
+        x = self.pool1(x)
+        x = self.block2(x)
+        x = self.pool2(x)
+        x = self.block3(x)
+        x = self.pool3(x)
+        x = self.block4(x)
+        x = self.pool4(x)
+        x = self.block5(x)
+        return x
+
+    def decode3(self, x):
+        x = self.block4(x)
+        x = self.pool4(x)
+        x = self.block5(x)
+        x = self.pool5(x)
+        x = x.view(x.shape[0], -1)
+        x = self.classifier(x)
+        return x
+
+    def decode4(self, x):
+        x = self.block5(x)
+        x = self.pool5(x)
+        x = x.view(x.shape[0], -1)
+        x = self.classifier(x)
+        return x
+
+    def decode5(self, x):
+        x = self.pool5(x)
+        x = x.view(x.shape[0], -1)
+        x = self.classifier(x)
+        return x
+
+
 
 class VGG16(nn.Module):
     def __init__(self, in_channels=1, num_classes=10):
