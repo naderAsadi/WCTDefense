@@ -524,12 +524,6 @@ class VGG19(nn.Module):
             nn.ReLU(True),
             nn.Linear(512, 10),
         )
-        # Initialization
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
-                m.weight.data.normal_(0, math.sqrt(2. / n))
-                m.bias.data.zero_()
 
     def forward(self, x):
         out = self.block1(x)
@@ -546,61 +540,61 @@ class VGG19(nn.Module):
         out = out.view(out.shape[0], -1)
         out = self.classifier(out)
         return out
-
-    def encode3(self, x):
-        x = self.block1(x)
-        x = self.pool1(x)
-        x = self.block2(x)
-        x = self.pool2(x)
-        x = self.block3(x)
-        x = self.pool3(x)
-        return x
-
-    def encode4(self, x):
-        x = self.block1(x)
-        x = self.pool1(x)
-        x = self.block2(x)
-        x = self.pool2(x)
-        x = self.block3(x)
-        x = self.pool3(x)
-        x = self.block4(x)
-        x = self.pool4(x)
-        return x
-
-    def encode5(self, x):
-        x = self.block1(x)
-        x = self.pool1(x)
-        x = self.block2(x)
-        x = self.pool2(x)
-        x = self.block3(x)
-        x = self.pool3(x)
-        x = self.block4(x)
-        x = self.pool4(x)
-        x = self.block5(x)
-        return x
-
-    def decode3(self, x):
-        x = self.block4(x)
-        x = self.pool4(x)
-        x = self.block5(x)
-        x = self.pool5(x)
-        x = x.view(x.shape[0], -1)
-        x = self.classifier(x)
-        return x
-
-    def decode4(self, x):
-        x = self.block5(x)
-        x = self.pool5(x)
-        x = x.view(x.shape[0], -1)
-        x = self.classifier(x)
-        return x
-
-    def decode5(self, x):
-        x = self.pool5(x)
-        x = x.view(x.shape[0], -1)
-        x = self.classifier(x)
-        return x
-
+    #
+    # def encode3(self, x):
+    #     x = self.block1(x)
+    #     x = self.pool1(x)
+    #     x = self.block2(x)
+    #     x = self.pool2(x)
+    #     x = self.block3(x)
+    #     x = self.pool3(x)
+    #     return x
+    #
+    # def encode4(self, x):
+    #     x = self.block1(x)
+    #     x = self.pool1(x)
+    #     x = self.block2(x)
+    #     x = self.pool2(x)
+    #     x = self.block3(x)
+    #     x = self.pool3(x)
+    #     x = self.block4(x)
+    #     x = self.pool4(x)
+    #     return x
+    #
+    # def encode5(self, x):
+    #     x = self.block1(x)
+    #     x = self.pool1(x)
+    #     x = self.block2(x)
+    #     x = self.pool2(x)
+    #     x = self.block3(x)
+    #     x = self.pool3(x)
+    #     x = self.block4(x)
+    #     x = self.pool4(x)
+    #     x = self.block5(x)
+    #     return x
+    #
+    # def decode3(self, x):
+    #     x = self.block4(x)
+    #     x = self.pool4(x)
+    #     x = self.block5(x)
+    #     x = self.pool5(x)
+    #     x = x.view(x.shape[0], -1)
+    #     x = self.classifier(x)
+    #     return x
+    #
+    # def decode4(self, x):
+    #     x = self.block5(x)
+    #     x = self.pool5(x)
+    #     x = x.view(x.shape[0], -1)
+    #     x = self.classifier(x)
+    #     return x
+    #
+    # def decode5(self, x):
+    #     x = self.pool5(x)
+    #     x = x.view(x.shape[0], -1)
+    #     x = self.classifier(x)
+    #     return x
+    #
 
 
 class VGG16(nn.Module):
