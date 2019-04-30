@@ -65,7 +65,7 @@ def whiten_and_color(cF, sF):
 
     targetFeature = torch.mm(torch.mm(torch.mm(s_v[:, 0:k_s], torch.diag(s_d)), (s_v[:, 0:k_s].t())), whiten_cF)
     targetFeature = targetFeature + s_mean.unsqueeze(1).expand_as(targetFeature)
-    return targetFeature  # , color_fm
+    return targetFeature, whiten_cF  # , color_fm
 
 
 def transform(cF, sF, csF, alpha):
@@ -76,9 +76,9 @@ def transform(cF, sF, csF, alpha):
     cFView = cF.view(C, -1)
     sFView = sF.view(C, -1)
 
-    targetFeature = whiten_and_color(cFView, sFView)
+    targetFeature, whiten = whiten_and_color(cFView, sFView)
     targetFeature = targetFeature.view_as(cF)
     ccsF = alpha * targetFeature + (1.0 - alpha) * cF
     ccsF = ccsF.float().unsqueeze(0)
     csF.data.resize_(ccsF.size()).copy_(ccsF)
-    return csF  # , whittened
+    return csF, whiten  # , whittened

@@ -391,6 +391,98 @@ class AEVGG19(nn.Module):
         out = self.conv27(out)
         return out
 
+    def encode(self, x):
+        out = self.conv1(x)
+        out = self.reflecPad1(out)
+        out = self.conv2(out)
+        out = self.relu2(out)
+        out = self.reflecPad3(out)
+        out = self.conv3(out)
+        out = self.relu3(out)
+        out, pool_idx = self.maxPool(out)
+        out = self.reflecPad4(out)
+        out = self.conv4(out)
+        out = self.relu4(out)
+        out = self.reflecPad5(out)
+        out = self.conv5(out)
+        out = self.relu5(out)
+        out, pool_idx2 = self.maxPool2(out)
+        out = self.reflecPad6(out)
+        out = self.conv6(out)
+        out = self.relu6(out)
+        out = self.reflecPad7(out)
+        out = self.conv7(out)
+        out = self.relu7(out)
+        out = self.reflecPad8(out)
+        out = self.conv8(out)
+        out = self.relu8(out)
+        out = self.reflecPad9(out)
+        out = self.conv9(out)
+        out = self.relu9(out)
+        out, pool_idx3 = self.maxPool3(out)
+        out = self.reflecPad10(out)
+        out = self.conv10(out)
+        out = self.relu10(out)
+        out = self.reflecPad11(out)
+        out = self.conv11(out)
+        out = self.relu11(out)
+        out = self.reflecPad12(out)
+        out = self.conv12(out)
+        out = self.relu12(out)
+        out = self.reflecPad13(out)
+        out = self.conv13(out)
+        out = self.relu13(out)
+        out, pool_idx4 = self.maxPool4(out)
+        out = self.reflecPad14(out)
+        out = self.conv14(out)
+        out = self.relu14(out)
+        return out
+
+    def decode(self, x):
+        out = self.reflecPad15(x)
+        out = self.conv15(out)
+        out = self.relu15(out)
+        out = self.unpool(out)
+        out = self.reflecPad16(out)
+        out = self.conv16(out)
+        out = self.relu16(out)
+        out = self.reflecPad17(out)
+        out = self.conv17(out)
+        out = self.relu17(out)
+        out = self.reflecPad18(out)
+        out = self.conv18(out)
+        out = self.relu18(out)
+        out = self.reflecPad19(out)
+        out = self.conv19(out)
+        out = self.relu19(out)
+        out = self.unpool2(out)
+        out = self.reflecPad20(out)
+        out = self.conv20(out)
+        out = self.relu20(out)
+        out = self.reflecPad21(out)
+        out = self.conv21(out)
+        out = self.relu21(out)
+        out = self.reflecPad22(out)
+        out = self.conv22(out)
+        out = self.relu22(out)
+        out = self.reflecPad23(out)
+        out = self.conv23(out)
+        out = self.relu23(out)
+        out = self.unpool3(out)
+        out = self.reflecPad24(out)
+        out = self.conv24(out)
+        out = self.relu24(out)
+        out = self.reflecPad25(out)
+        out = self.conv25(out)
+        out = self.relu25(out)
+        out = self.unpool4(out)
+        out = self.reflecPad26(out)
+        out = self.conv26(out)
+        out = self.relu26(out)
+        out = self.reflecPad27(out)
+        out = self.conv27(out)
+        return out
+
 ###################
 # Classifiers
 ###################
@@ -459,143 +551,6 @@ class Net(nn.Module):
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         return F.log_softmax(x, dim=1)
-
-class VGG19(nn.Module):
-    def __init__(self, in_channels):
-        super(VGG19, self).__init__()
-        self.block1 = nn.Sequential(
-            nn.Conv2d(in_channels, 64, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(64, 64, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.pool1 = nn.MaxPool2d(2,2)
-
-        self.block2 = nn.Sequential(
-            nn.Conv2d(64, 128, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(128, 128, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.pool2 = nn.MaxPool2d(2, 2)
-
-        self.block3 = nn.Sequential(
-            nn.Conv2d(128, 256, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(256, 256, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(256, 256, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(256, 256, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.pool3 = nn.MaxPool2d(2, 2)
-
-        self.block4 = nn.Sequential(
-            nn.Conv2d(256, 512, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(512, 512, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(512, 512, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(512, 512, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.pool4 = nn.MaxPool2d(2, 2)
-
-        self.block5 = nn.Sequential(
-            nn.Conv2d(512, 512, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(512, 512, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(512, 512, 3, 1, 1),
-            nn.ReLU(),
-            nn.Conv2d(512, 512, 3, 1, 1),
-            nn.ReLU()
-        )
-        self.pool5 = nn.MaxPool2d(2, 2)
-
-        self.classifier = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(512, 512),
-            nn.ReLU(True),
-            nn.Dropout(),
-            nn.Linear(512, 512),
-            nn.ReLU(True),
-            nn.Linear(512, 10),
-        )
-
-    def forward(self, x):
-        out = self.block1(x)
-        out = self.pool1(out)
-        out = self.block2(out)
-        out = self.pool2(out)
-        out = self.block3(out)
-        out = self.pool3(out)
-        out = self.block4(out)
-        out = self.pool4(out)
-        out = self.block5(out)
-        out = self.pool5(out)
-
-        out = out.view(out.shape[0], -1)
-        out = self.classifier(out)
-        return out
-    #
-    # def encode3(self, x):
-    #     x = self.block1(x)
-    #     x = self.pool1(x)
-    #     x = self.block2(x)
-    #     x = self.pool2(x)
-    #     x = self.block3(x)
-    #     x = self.pool3(x)
-    #     return x
-    #
-    # def encode4(self, x):
-    #     x = self.block1(x)
-    #     x = self.pool1(x)
-    #     x = self.block2(x)
-    #     x = self.pool2(x)
-    #     x = self.block3(x)
-    #     x = self.pool3(x)
-    #     x = self.block4(x)
-    #     x = self.pool4(x)
-    #     return x
-    #
-    # def encode5(self, x):
-    #     x = self.block1(x)
-    #     x = self.pool1(x)
-    #     x = self.block2(x)
-    #     x = self.pool2(x)
-    #     x = self.block3(x)
-    #     x = self.pool3(x)
-    #     x = self.block4(x)
-    #     x = self.pool4(x)
-    #     x = self.block5(x)
-    #     return x
-    #
-    # def decode3(self, x):
-    #     x = self.block4(x)
-    #     x = self.pool4(x)
-    #     x = self.block5(x)
-    #     x = self.pool5(x)
-    #     x = x.view(x.shape[0], -1)
-    #     x = self.classifier(x)
-    #     return x
-    #
-    # def decode4(self, x):
-    #     x = self.block5(x)
-    #     x = self.pool5(x)
-    #     x = x.view(x.shape[0], -1)
-    #     x = self.classifier(x)
-    #     return x
-    #
-    # def decode5(self, x):
-    #     x = self.pool5(x)
-    #     x = x.view(x.shape[0], -1)
-    #     x = self.classifier(x)
-    #     return x
-    #
-
 
 class VGG16(nn.Module):
     def __init__(self, in_channels=1, num_classes=10):
@@ -929,6 +884,107 @@ class VGG16(nn.Module):
         out = self.classifier(out)
         return out
 
+##########################
+# Pytorch VGG19 ImageNet
+##########################
+class VGG19(nn.Module):
+    def __init__(self, in_channels, num_classes, init_weights=True):
+        super(VGG19, self).__init__()
+        self.block1 = nn.Sequential(
+            nn.Conv2d(in_channels, 64, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.block2 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(128, 128, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.block3 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(256, 256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.block4 = nn.Sequential(
+            nn.Conv2d(256, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        self.block5 = nn.Sequential(
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+        )
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.classifier = nn.Sequential(
+            nn.Dropout(),
+            nn.Linear(512 *1 * 1, 512),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(512, 512),
+            nn.ReLU(True),
+            nn.Linear(512, num_classes),
+        )
+
+    def forward(self, x):
+        x = self.block1(x)
+        x = self.block2(x)
+        x = self.block3(x)
+        x = self.block4(x)
+        x = self.block5(x)
+        x = self.pool(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+    def encode4(self, x):
+        x = self.block1(x)
+        x = self.block2(x)
+        x = self.block3(x)
+        x = self.block4(x)
+        return x
+
+    def decode4(self, x):
+        x = self.block5(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
+    def encode5(self, x):
+        x = self.block1(x)
+        x = self.block2(x)
+        x = self.block3(x)
+        x = self.block4(x)
+        x= self.block5(x)
+        return x
+
+    def decode5(self, x):
+        x = self.pool(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
+
 ####################
 # Helper Functions
 ####################
@@ -945,3 +1001,43 @@ def load_model(model, root):
     model.load_state_dict(checkpoint)
     #optimizer.load_state_dict(checkpoint['optimizer'])
     return model#, optimizer, epoch
+
+
+#model = AEVGG19()
+#checkpoint = torch.load('/home/nader/.torch/models/VGG19_AE.pth')
+#model.load_state_dict(checkpoint)
+
+#
+# state_dict = checkpoint['state_dict']
+# state_dict['block1.0.weight'] = state_dict.pop('features.module.0.weight')
+# state_dict['block1.0.bias'] = state_dict.pop('features.module.0.bias')
+# state_dict['block1.2.weight'] = state_dict.pop('features.module.2.weight')
+# state_dict['block1.2.bias'] = state_dict.pop('features.module.2.bias')
+# state_dict['block2.0.weight'] = state_dict.pop('features.module.5.weight')
+# state_dict['block2.0.bias'] = state_dict.pop('features.module.5.bias')
+# state_dict['block2.2.weight'] = state_dict.pop('features.module.7.weight')
+# state_dict['block2.2.bias'] = state_dict.pop('features.module.7.bias')
+# state_dict['block3.0.weight'] = state_dict.pop('features.module.10.weight')
+# state_dict['block3.0.bias'] = state_dict.pop('features.module.10.bias')
+# state_dict['block3.2.weight'] = state_dict.pop('features.module.12.weight')
+# state_dict['block3.2.bias'] = state_dict.pop('features.module.12.bias')
+# state_dict['block3.4.weight'] = state_dict.pop('features.module.14.weight')
+# state_dict['block3.4.bias'] = state_dict.pop('features.module.14.bias')
+# state_dict['block3.6.weight'] = state_dict.pop('features.module.16.weight')
+# state_dict['block3.6.bias'] = state_dict.pop('features.module.16.bias')
+# state_dict['block4.0.weight'] = state_dict.pop('features.module.19.weight')
+# state_dict['block4.0.bias'] = state_dict.pop('features.module.19.bias')
+# state_dict['block4.2.weight'] = state_dict.pop('features.module.21.weight')
+# state_dict['block4.2.bias'] = state_dict.pop('features.module.21.bias')
+# state_dict['block4.4.weight'] = state_dict.pop('features.module.23.weight')
+# state_dict['block4.4.bias'] = state_dict.pop('features.module.23.bias')
+# state_dict['block4.6.weight'] = state_dict.pop('features.module.25.weight')
+# state_dict['block4.6.bias'] = state_dict.pop('features.module.25.bias')
+# state_dict['block5.0.weight'] = state_dict.pop('features.module.28.weight')
+# state_dict['block5.0.bias'] = state_dict.pop('features.module.28.bias')
+# state_dict['block5.2.weight'] = state_dict.pop('features.module.30.weight')
+# state_dict['block5.2.bias'] = state_dict.pop('features.module.30.bias')
+# state_dict['block5.4.weight'] = state_dict.pop('features.module.32.weight')
+# state_dict['block5.4.bias'] = state_dict.pop('features.module.32.bias')
+# state_dict['block5.6.weight'] = state_dict.pop('features.module.34.weight')
+# state_dict['block5.6.bias'] = state_dict.pop('features.module.34.bias')
